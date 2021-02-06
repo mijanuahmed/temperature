@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Temperature Hot</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="images/favicon.png" type="image/x-icon">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            background: url(images/bg-image.jpg) no-repeat;
+            background-size: cover;
+            height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <form class="col-md-6 m-auto py-5">
+            <div class="input-group mb-3">
+                <input type="text" id="city-name" class="form-control" placeholder="Enter a location for Weather ...">
+                <div class="input-group-append">
+                    <button type="button" class="btn btn-danger" id="search-button">Search</button>
+                </div>
+            </div>
+        </form>
+        <div class="weather-status text-white text-center">
+            <img id="icon" src="" alt="">
+            <h1 id="show-city">Dhaka</h1>
+            <h3><span id="show-temperature"></span>&deg;C</h3>
+            <h1 id="weather-status" class="lead">Rain</h1>
+        </div>
+    </div>
+    <script>
+        const apiKey = 'f89c097f4ec727bd9aa7b51556a155ad';
+        const apiBase = 'https://api.openweathermap.org/data/2.5/weather';
+
+        const getWeatherData = city => {
+            const url = `${apiBase}?q=${city}&units=metric&appid=${apiKey}`;
+            fetch(url)
+                .then(response => response.json())
+                .then(data => updateUI(data))
+        }
+
+        const searchButton = document.getElementById("search-button");
+        searchButton.addEventListener("click", () => {
+            const cityName = document.getElementById("city-name").value;
+            getWeatherData(cityName);
+        })
+
+        const updateUI = data => {
+            document.getElementById("show-city").innerText = data.name || "Unknown Location";
+            document.getElementById("show-temperature").innerText = data.main.temp;
+            document.getElementById("weather-status").innerText = data.weather[0].main;
+            document.getElementById("icon").setAttribute("src", `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`);
+            document.getElementById("city-name").value = "";
+
+        }
+
+       
+    </script>
+</body>
+
+</html>
